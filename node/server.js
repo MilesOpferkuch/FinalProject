@@ -4,7 +4,11 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-app.get("tides/:station/:begin_date/:end_date/:tz", (req, res) => {
+app.get('/', (req, res) => {
+    res.send('Hello World! Welcome to Node.js')
+})
+
+app.get("/tides/:station/:begin_date/:end_date/:tz", (req, res) => {
     console.log("wtf");
     const station = req.params.station;
     const begin_date = req.params.begin_date;
