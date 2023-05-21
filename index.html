@@ -18,18 +18,27 @@
         <h2>OceanTides</h2> <!-- add animation css end-->
         <p></p>
     </div>
-    <section class="button">
-        <button id="dataButton">Data For Your Location</button> <!--Button to get data, js for this! -->
-    </section>
+
     <section class="frontPhotos">
         <a> <img class="first_photo" src=""></a> <!-- photos for first page-->
         <a><img class="second_photo" src=""></a>
     </section>
+    <section class="inputs">
+        <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
+        <input type="number" id="station" required />
+        <br>
+        <label>Start date:</label>
+        <input type="date" id="begin_date" name="begin_date_picker" required />
+        <br>
+        <label>End date:</label>
+        <input type="date" id="end_date" name="end_date_picker" required />
+        <br>
+    </section>
+    <section class="button">
+        <button id="buttonGo">Data For Your Location</button> <!--Button to get data, js for this! -->
+    </section>
 
-    <h4>Start date:</h4>
-    <input type="date" id="begin_date" name="begin_date_picker">
-    <h4>End date:</h4>
-    <input type="date" id="end_date" name="end_date_picker">
+
     <script src="script.js"></script>
 </body>
 

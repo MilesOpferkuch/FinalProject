@@ -4,12 +4,11 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-app.get("/tides/:station/:begin_date/:end_date/:tz", (req, res) => {
+app.get("/tides/:station/:begin_date/:end_date", (req, res) => {
     const station = req.params.station;
     const begin_date = req.params.begin_date;
     const end_date = req.params.end_date;
-    const tz = req.params.tz;
-    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&end_date=${end_date}&datum=MLLW&station=${station}&time_zone=${tz}&units=english&interval=10&format=json`
+    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&end_date=${end_date}&datum=MLLW&station=${station}&time_zone=lst_ldt&units=english&interval=10&format=json`
 
     request(url, (error, response, body) => {
         if (error) {
@@ -22,7 +21,7 @@ app.get("/tides/:station/:begin_date/:end_date/:tz", (req, res) => {
 app.get("/metadata/:station", (req, res) => {
     const station = req.params.station;
     const url = `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/${station}.json?units=english`
-
+    console.log(url);
     request(url, (error, response, body) => {
         if (error) {
             return res.status(500).send("Error retrieving station metadata.");
@@ -31,12 +30,13 @@ app.get("/metadata/:station", (req, res) => {
     })
 });
 
-app.get("suntimes/:lat/:lon/:tz/:date", (req, res) => {
+app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
     const lat = req.params.lat;
     const lon = req.params.lon;
     const tz = req.params.tz;
     const date = req.params.date;
     const url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lon}&timezone=${tz}&date=${date}`
+    console.log(url);
 
     request(url, (error, response, body) => {
         if (error) {
