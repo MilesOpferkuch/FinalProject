@@ -16,37 +16,36 @@ if (day < 10) {
 let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
 
 function getTides(station, beginDate, endDate) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}/${endDate}`);
-    xhr.send();
-    xhr.onload = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                console.log(body);
-                return body;
+    return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}/${endDate}`);
+        xhr.send();
+        xhr.onload = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const body = JSON.parse(xhr.responseText);
+                    resolve(body);
+                    console.log(xhr.responseText);
+                } else {
+                    reject(Error(xhr.responseText));
+                }
             }
         }
-    }
+    })
 }
-
-
 
 function getMetadata(station) {
     return new Promise(function(resolve, reject) {
-
         const xhr = new XMLHttpRequest();
         xhr.open("GET", `http://localhost:3000/metadata/${station}`);
         xhr.send();
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    const body = JSON.parse(xhr.responseText);
-                    let lat = body.stations[0].lat;
-                    let lon = body.stations[0].lng;
-                    let tz = body.stations[0].timezone;
-                    resolve({'lat': lat, 'lon': lon, 'tz':tz});
+                    const body = JSON.parse(xhr.response);
                     console.log(body);
+                   
+                    resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
                 }
@@ -54,7 +53,6 @@ function getMetadata(station) {
         }
     });
 }
-
 
 function getSunData(lat, lon, tz, date) {
     const xhr2 = new XMLHttpRequest();
@@ -80,6 +78,27 @@ function failureCallback(error) {
 }
 
 window.onload = function() {
+  //  const secondsSinceEpoch = Math.round(Date.now() / 1000)
+    console.log((Date.parse("2023-05-21:00:00.000Z"))/1000);
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
 
     const stationInput = document.getElementById("station");
     // Configure date pickers
@@ -93,15 +112,25 @@ window.onload = function() {
     const buttonGo = document.getElementById("buttonGo");
     buttonGo.addEventListener("click", () => {
         let station = stationInput.value;
+        // Tides API wants yyyymmdd without dashes
         let beginDate = beginDateSelector.value.replaceAll('-', '');
         let endDate = endDateSelector.value.replaceAll('-', '');
-        getMetadata(stationInput.value).then(
+
+        getTides(station, beginDate, endDate).then(
             (result) => {
-                getSunData(result.lat, result.lon, result.tz, beginDateSelector.value);
+                getMetadata(station).then(
+                    (result) => {
+                        getSunData(result.lat, result.lng, result.timezonecorr, beginDateSelector.value);
+                    },
+                    (onRejected) => {
+                        console.log("oops");
+                    });                
             },
             (onRejected) => {
                 console.log("oops");
-            });
+            }
+        )
+
 
     });
 

@@ -26,7 +26,13 @@ app.get("/metadata/:station", (req, res) => {
         if (error) {
             return res.status(500).send("Error retrieving station metadata.");
         }
-        res.send(body);
+        body = JSON.parse(body).stations[0];
+        res.send({'state': body.state,
+        'timezonecorr': body.timezonecorr,
+        'observedst': body.observedst,
+        'name': body.name,
+        'lat': body.lat,
+        'lng': body.lng});
     })
 });
 
@@ -44,8 +50,24 @@ app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
         }
         body = JSON.parse(body);
         res.send(body);
+        console.log(body);
     })
 });
+
+app.get("/timezone/:lat/:lon/:timestamp", (req, res) => {
+    const lat = req.params.lat;
+    const lon = req.params.lon;
+    const date = req.params.timestamp;
+    
+    const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=AIzaSyBQoqoV57zkl9rIHLKVKAbMpsdVddOZNWQ`;
+    request(url, (error, response, body) => {
+        if (error) {
+            return res.status(500).send("Error retrieving timezone data.");
+        }
+        body = JSON.parse(body);
+        res.send(body);
+    })
+})
 
 app.listen(3000, () => {
     console.log('App listening on port 3000!');
