@@ -74,33 +74,52 @@ function getSunData(lat, lon, tz, date) {
     })
 }
 
-function drawGraph(ctx, data) {
-    console.log(data);
-    for (i in JSON.parse(data)) {
-        for (x in i) {
-            console.log(x)
-        }
-        
+function drawGraph(ctx, tideData, date, metadata) {
+    let parsedData = JSON.parse(tideData).predictions;
+    let labels = [];
+    let data = [];
+    for (var i = 0; i < parsedData.length; i++) {
+        let timeStr = parsedData[i].t.slice(-5);
+        labels.push(timeStr);
+        data.push(parsedData[i].v);
     }
+
     new Chart(ctx, {
         type: 'bar',
+        text: 'achbedbe',
         data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [
-          {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-            backgroundColor: '#7faefa'
-          }
-      ]
+            labels: labels,
+            datasets: [
+            {
+                label: 'Tide: ',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: '#7faefa'
+            }
+            ]
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: `Tides on ${date} at station ${metadata.name} (${metadata.station})`,
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    },
+                    font: {
+                        size: 18
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
-          }
         }
       });
 }
@@ -155,13 +174,13 @@ window.onload = function() {
                                 // Get sunrise/sunset times
                                 getSunData(lat, lon, tzOffset, beginDateSelector.value).then(
                                     (sunResult) => {
-                                        console.log(sunResult);
+                                        drawGraph(ctx, tidesResult, beginDateSelector.value, metaResult);
                                     },
                                     (onRejected) => {
                                         console.log("Error retrieving sunrise/sunset data");
                                     }
                                 );
-                              //  drawGraph(ctx, tidesResult);
+                                
 
                             },
                             (onRejected) => {

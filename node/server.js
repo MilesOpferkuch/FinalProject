@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 app.get("/tides/:station/:begin_date", (req, res) => {
     const station = req.params.station;
     const begin_date = req.params.begin_date;
-    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&range=24&datum=MLLW&station=${station}&time_zone=lst_ldt&units=english&interval=10&format=json`
+    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&range=24&datum=MLLW&station=${station}&time_zone=lst_ldt&units=english&interval=30&format=json`
     console.log(url);
     request(url, (error, response, body) => {
         if (error) {
@@ -31,12 +31,14 @@ app.get("/metadata/:station", (req, res) => {
             return res.status(500).send("Error retrieving station metadata.");
         }
         body = JSON.parse(body).stations[0];
-        res.send({'state': body.state,
-        'timezonecorr': body.timezonecorr,
-        'observedst': body.observedst,
-        'name': body.name,
-        'lat': body.lat,
-        'lng': body.lng});
+        res.send({
+            'station': station,
+            'state': body.state,
+            'timezonecorr': body.timezonecorr,
+            'observedst': body.observedst,
+            'name': body.name,
+            'lat': body.lat,
+            'lng': body.lng});
     })
 });
 

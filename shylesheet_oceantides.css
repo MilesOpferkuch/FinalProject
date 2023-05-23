@@ -63,6 +63,27 @@ a {
     color: rgb(232, 232, 232);
 }
 
+hr {
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 5%;
+    border: 1px solid #5c5c5c;
+}
+
+div.graph {
+    display: block;
+    width: 70%;
+}
+
+div.graphFlex {
+    width: 100%;
+    margin-top: 32px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
 footer {
     width: 100%;
     margin-top: 32px;
