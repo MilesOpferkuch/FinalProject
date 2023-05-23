@@ -1,25 +1,15 @@
-let date = new Date();
-let year = date.getFullYear().toString();
-let month = date.getMonth() + 1;
-let day = date.getDate();
-// Zero-pad date
-if (month < 10) {
-    month = month.toString().padStart(2, "0");
-}
-if (day < 10) {
-    day = day.toString().padStart(2, "0");
-}
-let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
 
-function getTides(station, beginDate, endDate) {
+
+function getTides(station, beginDate) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}/${endDate}`);
+        xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}`);
         xhr.send();
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = xhr.responseText;
+                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -38,6 +28,7 @@ function getMetadata(station) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.response);
+                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -45,20 +36,6 @@ function getMetadata(station) {
             };
         }
     });
-}
-
-function getSunData(lat, lon, tz, date) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${tz}/${date}`)
-    xhr.send();
-    xhr.onload = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const body = JSON.parse(xhr.responseText);
-                return body;
-            }
-        }
-    }
 }
 
 function getTimezoneData(lat, lon, timestamp) {
@@ -70,6 +47,7 @@ function getTimezoneData(lat, lon, timestamp) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.responseText);
+                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -78,6 +56,27 @@ function getTimezoneData(lat, lon, timestamp) {
         }        
     })
 }
+
+function getSunData(lat, lon, tz, date) {
+    return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${tz}/${date}`)
+        xhr.send();
+        xhr.onload = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const body = JSON.parse(xhr.responseText);
+                    console.log(body);
+                    resolve(body);
+                } else {
+                    reject(Error(xhr.responseText));
+                }
+            }
+        }
+    })
+}
+
+
 
 function drawGraph(ctx, data) {
     console.log(data);
@@ -111,53 +110,70 @@ function drawGraph(ctx, data) {
 }
 
 window.onload = function() {
+    let today = new Date();
+    let year = today.getFullYear().toString();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    // Zero-pad date
+    if (month < 10) {
+        month = month.toString().padStart(2, "0");
+    }
+    if (day < 10) {
+        day = day.toString().padStart(2, "0");
+    }
+    let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
+
     const ctx = document.getElementById('myChart');
     Chart.defaults.color = '#FFFFFF';
     Chart.defaults.backgroundColor = '#c4c4c4';
     Chart.defaults.borderColor = '#575757';
 
     const stationInput = document.getElementById("station");
-    // Configure date pickers
+    // Configure date picker
     const beginDateSelector = document.getElementById("begin_date");
     beginDateSelector.value = dateString;
     beginDateSelector.min = dateString;
-    const endDateSelector = document.getElementById("end_date");
-    endDateSelector.value = dateString;
-    endDateSelector.min = dateString;
 
     const buttonGo = document.getElementById("buttonGo");
     buttonGo.addEventListener("click", () => {
         let station = stationInput.value;
         // Tides API wants yyyymmdd without dashes
         let beginDate = beginDateSelector.value.replaceAll('-', '');
-        let endDate = endDateSelector.value.replaceAll('-', '');
         let lat = 0;
         let lon = 0;
-        getTides(station, beginDate, endDate).then(
+        getTides(station, beginDate).then(
             (tidesResult) => {
                 getMetadata(station).then(
-                    (result) => {
+                    (metaResult) => {
                         // Get lat, lon and timezone info from the NOAA station
-                        lat = result.lat;
-                        lon = result.lng;
+                        lat = metaResult.lat;
+                        lon = metaResult.lng;
                         // NOAA doesn't return the time compensated for DST
                         // so we check with Google timezone API and the following monstrosity:
-                        let tzString = Math.abs(result.timezonecorr).toString();
+                        let tzString = Math.abs(metaResult.timezonecorr).toString();
                         tzString = tzString.padStart(2, '0');
-                        if (result.timezonecorr < 0) {
+                        if (metaResult.timezonecorr < 0) {
                             tzString = '-' + tzString;
                         } else {
                             tzString = '+' + tzString;
                         }
                         let dateObject = new Date(`${beginDateSelector.value}T00:00:00.000${tzString}:00`)
                         let timestamp = dateObject.valueOf()/1000;
+
                         // Fetch timezone data from Google's API
-                        getTimezoneData(result.lat, result.lng, timestamp).then(
-                            (result) => {
-                                tzOffset = (result.rawOffset + result.dstOffset)/60/60;
+                        getTimezoneData(metaResult.lat, metaResult.lng, timestamp).then(
+                            (tzResult) => {
+                                tzOffset = (tzResult.rawOffset + tzResult.dstOffset)/60/60;
                                 // Get sunrise/sunset times
-                                getSunData(lat, lon, tzOffset, beginDateSelector.value);
-                                drawGraph(ctx, tidesResult);
+                                getSunData(lat, lon, tzOffset, beginDateSelector.value).then(
+                                    (sunResult) => {
+                                        console.log(sunResult);
+                                    },
+                                    (onRejected) => {
+                                        console.log("Error retrieving sunrise/sunset data");
+                                    }
+                                );
+                              //  drawGraph(ctx, tidesResult);
 
                             },
                             (onRejected) => {
