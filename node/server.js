@@ -50,7 +50,6 @@ app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
         }
         body = JSON.parse(body);
         res.send(body);
-        console.log(body);
     })
 });
 

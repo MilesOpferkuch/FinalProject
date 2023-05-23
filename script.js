@@ -85,8 +85,6 @@ function getTimezoneData(lat, lon, timestamp) {
 }
 
 window.onload = function() {
-  //  const secondsSinceEpoch = Math.round(Date.now() / 1000)
-    console.log((Date.parse("2023-05-21:00:00.000Z"))/1000);
     const ctx = document.getElementById('myChart');
     new Chart(ctx, {
       type: 'bar',
