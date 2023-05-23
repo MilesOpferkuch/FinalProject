@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
-html{
-=======
 html {
->>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
     background-color: #093656;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
@@ -19,7 +15,6 @@ h2 {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-<<<<<<< HEAD
     
 }
 
@@ -50,7 +45,6 @@ button{ /* button aesthetics */
 .scrolltext{
     text-align: center;
     color: white;
-=======
 }
 
 label {
@@ -67,7 +61,6 @@ input {
 
 a {
     color: rgb(232, 232, 232);
->>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
 }
 
 footer {
