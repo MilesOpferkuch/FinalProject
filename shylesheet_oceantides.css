@@ -25,3 +25,13 @@ input {
 a {
     color: rgb(232, 232, 232);
 }
+
+footer {
+    width: 100%;
+    margin-top: 32px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    color: #8a8a8a;
+}

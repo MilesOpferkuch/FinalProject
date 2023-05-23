@@ -9,7 +9,7 @@ app.get("/tides/:station/:begin_date/:end_date", (req, res) => {
     const begin_date = req.params.begin_date;
     const end_date = req.params.end_date;
     const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&end_date=${end_date}&datum=MLLW&station=${station}&time_zone=lst_ldt&units=english&interval=10&format=json`
-
+    console.log(url);
     request(url, (error, response, body) => {
         if (error) {
             return res.status(500).send("Error retrieving tide data.");
@@ -43,7 +43,6 @@ app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
     const date = req.params.date;
     const url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lon}&timezone=${tz}&date=${date}`
     console.log(url);
-
     request(url, (error, response, body) => {
         if (error) {
             return res.status(500).send("Error retrieving sunrise/sunset data.");
@@ -57,8 +56,8 @@ app.get("/timezone/:lat/:lon/:timestamp", (req, res) => {
     const lat = req.params.lat;
     const lon = req.params.lon;
     const timestamp = req.params.timestamp;
-    
     const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=AIzaSyBQoqoV57zkl9rIHLKVKAbMpsdVddOZNWQ`;
+    console.log(url);
     request(url, (error, response, body) => {
         if (error) {
             return res.status(500).send("Error retrieving timezone data.");

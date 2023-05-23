@@ -19,8 +19,7 @@ function getTides(station, beginDate, endDate) {
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    const body = JSON.parse(xhr.responseText);
-                    console.log(body);
+                    const body = xhr.responseText;
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -39,7 +38,6 @@ function getMetadata(station) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.response);
-                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -57,7 +55,6 @@ function getSunData(lat, lon, tz, date) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const body = JSON.parse(xhr.responseText);
-                console.log(body);
                 return body;
             }
         }
@@ -73,7 +70,6 @@ function getTimezoneData(lat, lon, timestamp) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.responseText);
-                    console.log(body)
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -81,29 +77,44 @@ function getTimezoneData(lat, lon, timestamp) {
             }
         }        
     })
+}
 
+function drawGraph(ctx, data) {
+    console.log(data);
+    for (i in JSON.parse(data)) {
+        for (x in i) {
+            console.log(x)
+        }
+        
+    }
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          datasets: [
+          {
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1,
+            backgroundColor: '#7faefa'
+          }
+      ]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
 }
 
 window.onload = function() {
     const ctx = document.getElementById('myChart');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
+    Chart.defaults.color = '#FFFFFF';
+    Chart.defaults.backgroundColor = '#c4c4c4';
+    Chart.defaults.borderColor = '#575757';
 
     const stationInput = document.getElementById("station");
     // Configure date pickers
@@ -123,7 +134,7 @@ window.onload = function() {
         let lat = 0;
         let lon = 0;
         getTides(station, beginDate, endDate).then(
-            (result) => {
+            (tidesResult) => {
                 getMetadata(station).then(
                     (result) => {
                         // Get lat, lon and timezone info from the NOAA station
@@ -145,7 +156,9 @@ window.onload = function() {
                             (result) => {
                                 tzOffset = (result.rawOffset + result.dstOffset)/60/60;
                                 // Get sunrise/sunset times
-                                getSunData(lat, lon, tzOffset, beginDateSelector.value)
+                                getSunData(lat, lon, tzOffset, beginDateSelector.value);
+                                drawGraph(ctx, tidesResult);
+
                             },
                             (onRejected) => {
                                 console.log("Error retrieving timezone data");
