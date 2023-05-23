@@ -1,13 +1,56 @@
+<<<<<<< HEAD
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+html{
+=======
 html {
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
     background-color: #093656;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
 }
+/*body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
 
 h2 {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+<<<<<<< HEAD
+    
+}
+
+button{ /* button aesthetics */
+    margin: 100;
+    padding: 100;
+    font-size: 45px;
+    background-color: #1F7928;
+    color: white;
+    font: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.button{
+    padding-left: 300px;
+}
+
+.frontPhotos{
+    align-items: center;
+    position: relative;
+    width: 300px;
+    height: 300px;
+    top: 0;
+    left: 200;
+    margin: 10px;
+    padding: 5px;
+}
+
+.scrolltext{
+    text-align: center;
+    color: white;
+=======
 }
 
 label {
@@ -24,6 +67,7 @@ input {
 
 a {
     color: rgb(232, 232, 232);
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
 }
 
 footer {
