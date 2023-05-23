@@ -1,7 +1,3 @@
-//let station = 9410230
-let lat = 0;
-let lon = 0;
-
 let date = new Date();
 let year = date.getFullYear().toString();
 let month = date.getMonth() + 1;
@@ -24,8 +20,8 @@ function getTides(station, beginDate, endDate) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.responseText);
+                    console.log(body);
                     resolve(body);
-                    console.log(xhr.responseText);
                 } else {
                     reject(Error(xhr.responseText));
                 }
@@ -44,7 +40,6 @@ function getMetadata(station) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.response);
                     console.log(body);
-                   
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -55,13 +50,13 @@ function getMetadata(station) {
 }
 
 function getSunData(lat, lon, tz, date) {
-    const xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${tz}/${date}`)
-    xhr2.send();
-    xhr2.onload = function() {
-        if (xhr2.readyState === 4) {
-            if (xhr2.status === 200) {
-                const body = JSON.parse(xhr2.responseText);
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${tz}/${date}`)
+    xhr.send();
+    xhr.onload = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const body = JSON.parse(xhr.responseText);
                 console.log(body);
                 return body;
             }
@@ -69,12 +64,24 @@ function getSunData(lat, lon, tz, date) {
     }
 }
 
-function successCallback(result) {
-    console.log(`Success: ${result}`);
-}
+function getTimezoneData(lat, lon, timestamp) {
+    return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://localhost:3000/timezone/${lat}/${lon}/${timestamp}`)
+        xhr.send();
+        xhr.onload = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const body = JSON.parse(xhr.responseText);
+                    console.log(body)
+                    resolve(body);
+                } else {
+                    reject(Error(xhr.responseText));
+                }
+            }
+        }        
+    })
 
-function failureCallback(error) {
-    console.log(`Error: ${error}`);
 }
 
 window.onload = function() {
@@ -115,19 +122,44 @@ window.onload = function() {
         // Tides API wants yyyymmdd without dashes
         let beginDate = beginDateSelector.value.replaceAll('-', '');
         let endDate = endDateSelector.value.replaceAll('-', '');
-
+        let lat = 0;
+        let lon = 0;
         getTides(station, beginDate, endDate).then(
             (result) => {
                 getMetadata(station).then(
                     (result) => {
-                        getSunData(result.lat, result.lng, result.timezonecorr, beginDateSelector.value);
+                        // Get lat, lon and timezone info from the NOAA station
+                        lat = result.lat;
+                        lon = result.lng;
+                        // NOAA doesn't return the time compensated for DST
+                        // so we check with Google timezone API and the following monstrosity:
+                        let tzString = Math.abs(result.timezonecorr).toString();
+                        tzString = tzString.padStart(2, '0');
+                        if (result.timezonecorr < 0) {
+                            tzString = '-' + tzString;
+                        } else {
+                            tzString = '+' + tzString;
+                        }
+                        let dateObject = new Date(`${beginDateSelector.value}T00:00:00.000${tzString}:00`)
+                        let timestamp = dateObject.valueOf()/1000;
+                        // Fetch timezone data from Google's API
+                        getTimezoneData(result.lat, result.lng, timestamp).then(
+                            (result) => {
+                                tzOffset = (result.rawOffset + result.dstOffset)/60/60;
+                                // Get sunrise/sunset times
+                                getSunData(lat, lon, tzOffset, beginDateSelector.value)
+                            },
+                            (onRejected) => {
+                                console.log("Error retrieving timezone data");
+                            }
+                        )
                     },
                     (onRejected) => {
-                        console.log("oops");
+                        console.log("Error retrieving station metadata");
                     });                
             },
             (onRejected) => {
-                console.log("oops");
+                console.log("Error retrieving tide data");
             }
         )
 

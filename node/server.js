@@ -57,7 +57,7 @@ app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
 app.get("/timezone/:lat/:lon/:timestamp", (req, res) => {
     const lat = req.params.lat;
     const lon = req.params.lon;
-    const date = req.params.timestamp;
+    const timestamp = req.params.timestamp;
     
     const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=AIzaSyBQoqoV57zkl9rIHLKVKAbMpsdVddOZNWQ`;
     request(url, (error, response, body) => {
