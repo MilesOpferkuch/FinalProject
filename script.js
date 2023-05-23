@@ -33,7 +33,7 @@ function getMetadata(station) {
                 }
             };
         }
-    });
+    })
 }
 
 function getTimezoneData(lat, lon, timestamp) {
@@ -148,7 +148,6 @@ window.onload = function() {
                         }
                         let dateObject = new Date(`${beginDateSelector.value}T00:00:00.000${tzString}:00`)
                         let timestamp = dateObject.valueOf()/1000;
-
                         // Fetch timezone data from Google's API
                         getTimezoneData(metaResult.lat, metaResult.lng, timestamp).then(
                             (tzResult) => {
