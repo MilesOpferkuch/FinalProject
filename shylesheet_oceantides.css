@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
 html{
+=======
+html {
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
     background-color: #093656;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
 }
 /*body {
     display: flex;
@@ -10,10 +15,11 @@ html{
     align-items: center;
 } */
 
-h2{
+h2 {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+<<<<<<< HEAD
     
 }
 
@@ -44,4 +50,22 @@ button{ /* button aesthetics */
 .scrolltext{
     text-align: center;
     color: white;
+=======
+}
+
+label {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+a {
+    color: rgb(232, 232, 232);
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
 }

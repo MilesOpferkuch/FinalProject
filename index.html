@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+<<<<<<< HEAD
     <head>
        <link rel="stylesheet" href="shylesheet_oceantides.css"" />
         <title id="title">Ocean Tides</title>
@@ -15,9 +16,21 @@
     </style>
     <body>
     
+=======
+
+<head>
+    <link rel="stylesheet" href="shylesheet_oceantides.css" />
+    <title id="title">Ocean Tides</title>
+
+</head>
+
+<body>
+
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
     <section class="scrolltext">
-        <span id="sunset">Sunsets at:</span> 
+        <span id="sunset">Sunsets at:</span>
         <span id="sunrise">Sunrises at:</span>
+<<<<<<< HEAD
     <!-- </section> 
     <div class="watertitle">
         <h2>OceanTides</h2>  add animation css end
@@ -31,6 +44,39 @@
         <a><img class="frontPhotos" src="placeholder_image2.jpeg" ></a> 
     </div> 
         
+=======
+    </section>
+    <div class="watertitle">
+        <h2>OceanTides</h2> <!-- add animation css end-->
+        <p></p>
+    </div>
+>>>>>>> e6c1cd34e1677449cb91da817b173bef1231bdfc
 
-    </body>
+    <section class="frontPhotos">
+        <a> <img class="first_photo" src=""></a> <!-- photos for first page-->
+        <a><img class="second_photo" src=""></a>
+    </section>
+    <section class="inputs">
+        <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
+        <input type="number" id="station" value="9410230" required />
+        <br>
+        <label>Start date:</label>
+        <input type="date" id="begin_date" name="begin_date_picker" required />
+        <br>
+        <label>End date:</label>
+        <input type="date" id="end_date" name="end_date_picker" required />
+        <br>
+    </section>
+    <section class="button">
+        <button id="buttonGo">Data For Your Location</button> <!--Button to get data, js for this! -->
+    </section>
+
+    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+    
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
 </html>
