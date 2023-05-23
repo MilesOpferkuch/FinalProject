@@ -1,5 +1,3 @@
-
-
 function getTides(station, beginDate) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -76,8 +74,6 @@ function getSunData(lat, lon, tz, date) {
     })
 }
 
-
-
 function drawGraph(ctx, data) {
     console.log(data);
     for (i in JSON.parse(data)) {
@@ -112,15 +108,8 @@ function drawGraph(ctx, data) {
 window.onload = function() {
     let today = new Date();
     let year = today.getFullYear().toString();
-    let month = today.getMonth() + 1;
-    let day = today.getDate();
-    // Zero-pad date
-    if (month < 10) {
-        month = month.toString().padStart(2, "0");
-    }
-    if (day < 10) {
-        day = day.toString().padStart(2, "0");
-    }
+    let month = (today.getMonth() + 1).toString().padStart(2, "0");
+    let day = today.getDate().toString().padStart(2, "0");
     let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
 
     const ctx = document.getElementById('myChart');
@@ -189,8 +178,5 @@ window.onload = function() {
                 console.log("Error retrieving tide data");
             }
         )
-
-
     });
-
 };
