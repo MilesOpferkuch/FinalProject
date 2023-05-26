@@ -15,52 +15,50 @@
     </style-->
 
     <body>
-    
+        <header>
+            <img src="banner.jpg" style="width: 100%"/>
+        </header>
+
+        <!--
         <section class="scrolltext">
             <span id="sunset">Sunsets at:</span>
             <span id="sunrise">Sunrises at:</span>
         </section>
-        <!-- </section> 
-        <div class="watertitle">
-            <h2>OceanTides</h2>  add animation css end
-            <p></p>
-        </section> -->
-        <section class="button">
-            <button id="buttonGo">Data For Your Location</button> <!--Button to get data, js for this! -->
-        </section>
 
         <div>
-            <a><img class="frontPhotos" src="placeholder_image1.jpg" ></a> <!-- photos for first page--> 
+            <a><img class="frontPhotos" src="placeholder_image1.jpg" ></a>
             <a><img class="frontPhotos" src="placeholder_image2.jpeg" ></a> 
         </div> 
-
+    
         <section class="frontPhotos">
-            <a> <img class="first_photo" src=""></a> <!-- photos for first page-->
+            <a> <img class="first_photo" src=""></a> 
             <a><img class="second_photo" src=""></a>
         </section>
+    -->
+        <div class="mainContent">
+            <section class="inputs">
+                <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
+                <input type="number" id="station" value="9410230" required />
+                <br>
+                <label>Date:</label>
+                <input type="date" id="begin_date" name="begin_date_picker" required />
+                <br>
+                <button id="buttonGo">Go</button> <!--Button to get data, js for this! -->
+            </section>
 
-        <section class="inputs">
-            <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
-            <input type="number" id="station" value="9410230" required />
-            <br>
-            <label>Start date:</label>
-            <input type="date" id="begin_date" name="begin_date_picker" required />
-            <br>
-        </section>
-
-        <div class="graphFlex">
-            <div class="graph">
-                <canvas id="myChart" class="graph"></canvas>
+            <div class="graphFlex">
+                <div class="graph">
+                    <canvas id="myChart" class="graph"></canvas>
+                </div>
             </div>
         </div>
-        <hr>
-        <footer>
-            <p>Powered by <a href="https://sunrisesunset.io">sunrisesunset.io</a>, <a href="https://chartjs.org">chart.js</a> and <a href="https://api.tidesandcurrents.noaa.gov/api/prod/">NOAA CO-OPS</a></p>
-        </footer>
+            <hr>
+            <footer>
+                <p>Powered by <a href="https://sunrisesunset.io">sunrisesunset.io</a>, <a href="https://chartjs.org">chart.js</a> and <a href="https://api.tidesandcurrents.noaa.gov/api/prod/">NOAA CO-OPS</a></p>
+            </footer>
 
-        <script src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-</body>
+            <script src="script.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </body>
 
 </html>

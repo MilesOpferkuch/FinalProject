@@ -86,7 +86,6 @@ function drawGraph(ctx, tideData, date, metadata) {
 
     new Chart(ctx, {
         type: 'bar',
-        text: 'achbedbe',
         data: {
             labels: labels,
             datasets: [
