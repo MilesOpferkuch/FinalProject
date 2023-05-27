@@ -74,17 +74,40 @@ function getSunData(lat, lon, tz, date) {
     })
 }
 
-function drawGraph(ctx, tideData, date, metadata) {
+function drawGraph(chart, tideData, date, metadata, timeZoneName) {
+    // Clear all chart data
+    chart.data.labels = [];
+    chart.data.datasets[0].data = [];
+    // Reset text
+    chart.options.plugins.title.text = `Tides on ${date} at station ${metadata.name} (${metadata.station})`;
+    chart.options.scales.x.title.text = `Time (${timeZoneName})`
+    // Insert new data
     let parsedData = JSON.parse(tideData).predictions;
-    let labels = [];
-    let data = [];
     for (var i = 0; i < parsedData.length; i++) {
         let timeStr = parsedData[i].t.slice(-5);
-        labels.push(timeStr);
-        data.push(parsedData[i].v);
+        chart.data.labels.push(timeStr);
+        chart.data.datasets[0].data.push(parsedData[i].v);
     }
+    chart.update();
+}
 
-    new Chart(ctx, {
+window.onload = function() {
+
+    // Set up the date picker
+    let today = new Date();
+    let year = today.getFullYear().toString();
+    let month = (today.getMonth() + 1).toString().padStart(2, "0");
+    let day = today.getDate().toString().padStart(2, "0");
+    let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
+
+    // Set up the graph, make it empty at first
+    let labels = [];
+    let data = [];
+    const ctx = document.getElementById('myChart');
+    Chart.defaults.color = '#FFFFFF';
+    Chart.defaults.backgroundColor = '#c4c4c4';
+    Chart.defaults.borderColor = '#575757';
+    const tideChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -104,7 +127,7 @@ function drawGraph(ctx, tideData, date, metadata) {
                 },
                 title: {
                     display: true,
-                    text: `Tides on ${date} at station ${metadata.name} (${metadata.station})`,
+                    text: "",
                     padding: {
                         top: 10,
                         bottom: 10
@@ -116,25 +139,27 @@ function drawGraph(ctx, tideData, date, metadata) {
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Height (meters)",
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "",
+                        font: {
+                            size: 16
+                        }
+                    }
                 }
             }
         }
       });
-}
-
-window.onload = function() {
-    let today = new Date();
-    let year = today.getFullYear().toString();
-    let month = (today.getMonth() + 1).toString().padStart(2, "0");
-    let day = today.getDate().toString().padStart(2, "0");
-    let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
-
-    const ctx = document.getElementById('myChart');
-    Chart.defaults.color = '#FFFFFF';
-    Chart.defaults.backgroundColor = '#c4c4c4';
-    Chart.defaults.borderColor = '#575757';
-
     const stationInput = document.getElementById("station");
     // Configure date picker
     const beginDateSelector = document.getElementById("begin_date");
@@ -173,7 +198,7 @@ window.onload = function() {
                                 // Get sunrise/sunset times
                                 getSunData(lat, lon, tzOffset, beginDateSelector.value).then(
                                     (sunResult) => {
-                                        drawGraph(ctx, tidesResult, beginDateSelector.value, metaResult);
+                                        drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, tzResult.timeZoneName);
                                     },
                                     (onRejected) => {
                                         console.log("Error retrieving sunrise/sunset data");

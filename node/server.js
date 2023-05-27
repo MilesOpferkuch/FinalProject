@@ -64,6 +64,7 @@ app.get("/timezone/:lat/:lon/:timestamp", (req, res) => {
     const timestamp = req.params.timestamp;
     
     const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=AIzaSyBQoqoV57zkl9rIHLKVKAbMpsdVddOZNWQ`;
+    console.log(url);
     request(url, (error, response, body) => {
         if (error) {
             return res.status(500).send("Error retrieving timezone data.");
