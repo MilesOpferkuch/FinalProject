@@ -97,6 +97,7 @@ window.onload = function() {
     const beginDateSelector = document.getElementById("begin_date");
     const sunInfoText = document.getElementsByClassName("sunInfoText");
     const buttonGo = document.getElementById("buttonGo");
+    const errorText = document.getElementById("errortext")
 
     // Set up the graph, make it empty at first
     Chart.defaults.color = '#FFFFFF';
@@ -147,22 +148,27 @@ window.onload = function() {
                                         sunInfoText.dusk.innerText = sunResult.dusk;
                                         sunInfoText.last_light.innerText = sunResult.last_light;
                                         drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, tzResult.timeZoneName);
+                                        errorText.innerText = ""
                                     },
-                                    (onRejected) => {
+                                    (onSunRejected) => {
+                                        errorText.innerText = "Error retrieving sunrise/sunset data";
                                         console.log("Error retrieving sunrise/sunset data");
                                     }
                                 );
                             },
-                            (onRejected) => {
+                            (onTzRejected) => {
+                                errorText.innerText = "Error retrieving timezone data";
                                 console.log("Error retrieving timezone data");
                             }
                         )
                     },
-                    (onRejected) => {
+                    (onMetaRejected) => {
+                        errorText.innerText = "Error retrieving station metadata";
                         console.log("Error retrieving station metadata");
                     });                
             },
-            (onRejected) => {
+            (onTidesRejected) => {
+                errorText.innerText = "Error retrieving tide data";
                 console.log("Error retrieving tide data");
             }
         )
