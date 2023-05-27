@@ -5,39 +5,18 @@ html {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
 }
+
 * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 .mainContent {
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 3%
 }
-/*body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-} */
-
-h2 {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    
-}
-
-/*
-button{ 
-    margin: 100;
-    padding: 100;
-    font-size: 45px;
-    background-color: #1F7928;
-    color: white;
-    font: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-*/
 
 button {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -46,23 +25,8 @@ button {
     padding-bottom: 5px;
     padding-left: 8px;
     padding-right: 8px;
-    margin-top: 8px;
-}
-
-.frontPhotos{
-    align-items: center;
-    position: relative;
-    width: 300px;
-    height: 300px;
-    top: 0;
-    left: 200;
-    margin: 10px;
-    padding: 5px;
-}
-
-.scrolltext{
-    text-align: center;
-    color: white;
+    margin-top: 20px;
+    width: 80px
 }
 
 label {
@@ -72,8 +36,9 @@ label {
 }
 
 input {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 10px;
     padding: 4px;
     font-family: monospace;
     font-size: 18px;
@@ -90,20 +55,29 @@ hr {
     border: 1px solid #5c5c5c;
 }
 
-div.graph {
-    display: block;
-    width: 50%;
-}
-
 div.graphFlex {
     width: 100%;
     margin-top: 32px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: left;
 }
 
+div.inputs {
+    display: block;
+    margin-right: 5%;
+}
+
+div.graph {
+    display: block;
+    width: 50%;
+}
+
+div.sunData {
+    display: block;
+    margin-left: 10%
+}
 footer {
     width: 100%;
     margin-top: 22px;

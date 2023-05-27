@@ -19,36 +19,43 @@
             <img src="banner.jpg" style="width: 100%"/>
         </header>
 
-        <!--
-        <section class="scrolltext">
-            <span id="sunset">Sunsets at:</span>
-            <span id="sunrise">Sunrises at:</span>
-        </section>
-
-        <div>
-            <a><img class="frontPhotos" src="placeholder_image1.jpg" ></a>
-            <a><img class="frontPhotos" src="placeholder_image2.jpeg" ></a> 
-        </div> 
-    
-        <section class="frontPhotos">
-            <a> <img class="first_photo" src=""></a> 
-            <a><img class="second_photo" src=""></a>
-        </section>
-    -->
         <div class="mainContent">
-            <section class="inputs">
-                <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
-                <input type="number" id="station" value="9410230" required />
-                <br>
-                <label>Date:</label>
-                <input type="date" id="begin_date" name="begin_date_picker" required />
-                <br>
-                <button id="buttonGo">Go</button> <!--Button to get data, js for this! -->
-            </section>
+
 
             <div class="graphFlex">
+                <div class="inputs">
+                    <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
+                    <input type="number" id="station" value="9410230" style="width: 120px" required />
+                    <br>
+                    <label>Date:</label>
+                    <input type="date" id="begin_date" name="begin_date_picker" required />
+                    <br>
+                    <button id="buttonGo">Go</button> <!--Button to get data, js for this! -->
+                </div>
                 <div class="graph">
                     <canvas id="myChart" class="graph"></canvas>
+                </div>
+                <div class="sunData">
+                    <h3>First light: </h3>
+                    <p class="sunInfoText" id="first_light">--</p>
+                    <br>
+                    <h3>Dawn:</h3>
+                    <p class="sunInfoText" id="dawn">--</p>
+                    <br>
+                    <h3>Sunrise: </h3>
+                    <p class="sunInfoText" id="sunrise">--</p>
+                    <br>
+                    <h3>Golden hour:</h3>
+                    <p class="sunInfoText" id="golden_hour">--</p>
+                    <br>
+                    <h3>Sunset: </h3>
+                    <p class="sunInfoText" id="sunset">--</p>
+                    <br>
+                    <h3>Dusk:</h3>
+                    <p class="sunInfoText" id="dusk">--</p>
+                    <br>
+                    <h3>Last light:</h3>
+                    <p class="sunInfoText" id="last_light">--</p>
                 </div>
             </div>
         </div>
@@ -58,6 +65,7 @@
             </footer>
 
             <script src="script.js"></script>
+            <script src="chartConfig.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </body>
 

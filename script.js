@@ -7,7 +7,6 @@ function getTides(station, beginDate) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = xhr.responseText;
-                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -26,12 +25,11 @@ function getMetadata(station) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.response);
-                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
                 }
-            };
+            }
         }
     })
 }
@@ -45,7 +43,6 @@ function getTimezoneData(lat, lon, timestamp) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.responseText);
-                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -64,7 +61,6 @@ function getSunData(lat, lon, tz, date) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     const body = JSON.parse(xhr.responseText);
-                    console.log(body);
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -76,23 +72,19 @@ function getSunData(lat, lon, tz, date) {
 
 function drawGraph(chart, tideData, date, metadata, timeZoneName) {
     // Clear all chart data
-    chart.data.labels = [];
     chart.data.datasets[0].data = [];
-    // Reset text
+    // Set text
     chart.options.plugins.title.text = `Tides on ${date} at station ${metadata.name} (${metadata.station})`;
     chart.options.scales.x.title.text = `Time (${timeZoneName})`
     // Insert new data
     let parsedData = JSON.parse(tideData).predictions;
     for (var i = 0; i < parsedData.length; i++) {
-        let timeStr = parsedData[i].t.slice(-5);
-        chart.data.labels.push(timeStr);
         chart.data.datasets[0].data.push(parsedData[i].v);
     }
     chart.update();
 }
 
 window.onload = function() {
-
     // Set up the date picker
     let today = new Date();
     let year = today.getFullYear().toString();
@@ -100,73 +92,22 @@ window.onload = function() {
     let day = today.getDate().toString().padStart(2, "0");
     let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
 
+    const ctx = document.getElementById("myChart");
+    const stationInput = document.getElementById("station");
+    const beginDateSelector = document.getElementById("begin_date");
+    const sunInfoText = document.getElementsByClassName("sunInfoText");
+    const buttonGo = document.getElementById("buttonGo");
+
     // Set up the graph, make it empty at first
-    let labels = [];
-    let data = [];
-    const ctx = document.getElementById('myChart');
     Chart.defaults.color = '#FFFFFF';
     Chart.defaults.backgroundColor = '#c4c4c4';
     Chart.defaults.borderColor = '#575757';
-    const tideChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-            {
-                label: 'Tide: ',
-                data: data,
-                borderWidth: 1,
-                backgroundColor: '#7faefa'
-            }
-            ]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: "",
-                    padding: {
-                        top: 10,
-                        bottom: 10
-                    },
-                    font: {
-                        size: 18
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: "Height (meters)",
-                        font: {
-                            size: 16
-                        }
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: "",
-                        font: {
-                            size: 16
-                        }
-                    }
-                }
-            }
-        }
-      });
-    const stationInput = document.getElementById("station");
+    const tideChart = new Chart(ctx, chartConfig);
+
     // Configure date picker
-    const beginDateSelector = document.getElementById("begin_date");
     beginDateSelector.value = dateString;
     beginDateSelector.min = dateString;
 
-    const buttonGo = document.getElementById("buttonGo");
     buttonGo.addEventListener("click", () => {
         let station = stationInput.value;
         // Tides API wants yyyymmdd without dashes
@@ -198,14 +139,19 @@ window.onload = function() {
                                 // Get sunrise/sunset times
                                 getSunData(lat, lon, tzOffset, beginDateSelector.value).then(
                                     (sunResult) => {
+                                        sunInfoText.first_light.innerText = sunResult.first_light;
+                                        sunInfoText.dawn.innerText = sunResult.dawn;
+                                        sunInfoText.sunrise.innerText = sunResult.sunrise;
+                                        sunInfoText.golden_hour.innerText = sunResult.golden_hour;
+                                        sunInfoText.sunset.innerText = sunResult.sunset;
+                                        sunInfoText.dusk.innerText = sunResult.dusk;
+                                        sunInfoText.last_light.innerText = sunResult.last_light;
                                         drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, tzResult.timeZoneName);
                                     },
                                     (onRejected) => {
                                         console.log("Error retrieving sunrise/sunset data");
                                     }
                                 );
-                                
-
                             },
                             (onRejected) => {
                                 console.log("Error retrieving timezone data");

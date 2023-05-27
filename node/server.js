@@ -54,7 +54,7 @@ app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
             return res.status(500).send("Error retrieving sunrise/sunset data.");
         }
         body = JSON.parse(body);
-        res.send(body);
+        res.send(body.results);
     })
 });
 
