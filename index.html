@@ -13,53 +13,78 @@
         </header>
 
         <div class="mainContent">
-            <div class="graphFlex">
+            <div class="graphAndInputsFlex">
                 <div class="inputs">
-                    <label>Station ID: <a href="https://tidesandcurrents.noaa.gov/map/">(Find my station)</a></label>
-                    <input type="number" id="station" value="9410230" style="width: 120px" required />
-                    <br>
-                    <label>Date:</label>
-                    <input type="date" id="begin_date" name="begin_date_picker" required />
-                    <br>
-                    <button id="buttonGo">Go</button> <!--Button to get data, js for this! -->
-                    <br>
-                    <p class="errortext" id="errortext"></p>
+                    <div class="inputsLeft">
+                        <label for="stationInput"><a href="https://tidesandcurrents.noaa.gov/map/">Station ID:</a></label>
+                        <br>
+                        <input type="number" id="station" name="stationInput" value="9410230" style="width: 120px" required />
+                        <br>
+                        <label for="begin_date_picker">Date:</label>
+                        <br>
+                        <input type="date" id="begin_date" name="begin_date_picker" required />
+                        <br><br>
+                        <button id="buttonGo">Go</button>
+                        <br>
+                        <h4 class="errorHeader" id="errorHeader"></h4>
+                        <p class="errorText" id="errorText"></p>
+                    </div>
+                    <br><br>
+                    <div class="inputsRight">
+                        <h4>Units</h4>
+                        <div class="radioButtonGroup">
+                            <label for="units">Feet</label>
+                            <input type="radio" name="units" value="feet" />
+                            <label for="units">Meters</label>
+                            <input type="radio" name="units" value="meters" />
+                        </div>
+                        <br>
+                        <h4>Time format</h4>
+                        <div class="radioButtonGroup">
+                            <label for="timeFormat">12 Hour</label>
+                            <input type="radio" name="timeFormat" value="12" />
+                            <label for="timeFormat">24 Hour</label>
+                            <input type="radio" name="timeFormat" value="24" />
+                        </div>
+                    </div>
                 </div>
+                <br>
+
                 <div class="graph">
                     <canvas id="myChart" class="graph"></canvas>
                 </div>
-                <div class="sunData">
-                    <h3>First light: </h3>
-                    <p class="sunInfoText" id="first_light">--</p>
-                    <br>
-                    <h3>Dawn:</h3>
-                    <p class="sunInfoText" id="dawn">--</p>
-                    <br>
-                    <h3>Sunrise: </h3>
-                    <p class="sunInfoText" id="sunrise">--</p>
-                    <br>
-                    <h3>Golden hour:</h3>
-                    <p class="sunInfoText" id="golden_hour">--</p>
-                    <br>
-                    <h3>Sunset: </h3>
-                    <p class="sunInfoText" id="sunset">--</p>
-                    <br>
-                    <h3>Dusk:</h3>
-                    <p class="sunInfoText" id="dusk">--</p>
-                    <br>
-                    <h3>Last light:</h3>
-                    <p class="sunInfoText" id="last_light">--</p>
-                </div>
+            </div>
+            <div class="sunData">
+                <h3>First light: </h3>
+                <p class="sunInfoText" id="first_light">--</p>
+                <br>
+                <h3>Dawn:</h3>
+                <p class="sunInfoText" id="dawn">--</p>
+                <br>
+                <h3>Sunrise: </h3>
+                <p class="sunInfoText" id="sunrise">--</p>
+                <br>
+                <h3>Golden hour:</h3>
+                <p class="sunInfoText" id="golden_hour">--</p>
+                <br>
+                <h3>Sunset: </h3>
+                <p class="sunInfoText" id="sunset">--</p>
+                <br>
+                <h3>Dusk:</h3>
+                <p class="sunInfoText" id="dusk">--</p>
+                <br>
+                <h3>Last light:</h3>
+                <p class="sunInfoText" id="last_light">--</p>
             </div>
         </div>
-            <hr>
-            <footer>
-                <p>Powered by <a href="https://sunrisesunset.io">sunrisesunset.io</a>, <a href="https://chartjs.org">chart.js</a> and <a href="https://api.tidesandcurrents.noaa.gov/api/prod/">NOAA CO-OPS</a></p>
-            </footer>
+        <hr>
+        <footer>
+            <p>Powered by <a href="https://sunrisesunset.io">sunrisesunset.io</a>, <a href="https://chartjs.org">chart.js</a> and <a href="https://api.tidesandcurrents.noaa.gov/api/prod/">NOAA CO-OPS</a></p>
+        </footer>
 
-            <script src="script.js"></script>
-            <script src="chartConfig.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="script.js"></script>
+        <script src="chartConfig.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </body>
 
 </html>

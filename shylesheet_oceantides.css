@@ -13,45 +13,63 @@ html {
 }
 
 .mainContent {
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    margin-bottom: 10%;
+
 }
 
 button {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 18px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 8px;
-    padding-right: 8px;
+    font-size: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
     margin-top: 20px;
     width: 80px
 }
 
 label {
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 input {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     padding: 4px;
     font-family: monospace;
-    font-size: 18px;
+    font-size: 14px;
+}
+
+input[type="radio"] {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 2px;
+    font-family: monospace;
+    font-size: 14px;
 }
 
 a {
     color: rgb(232, 232, 232);
 }
 
-.errortext {
+.errorHeader {
     margin-top: 20px;
+    margin-bottom: 10px;
     color:rgb(235, 64, 52)
+}
+
+.errorText {
+    color: rgb(235, 64, 52);
+    font-size: 15px;
 }
 
 hr {
@@ -61,28 +79,60 @@ hr {
     border: 1px solid #5c5c5c;
 }
 
-div.graphFlex {
+div.mainContent {
     width: 100%;
-    margin-top: 32px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 10%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: left;
 }
 
-div.inputs {
-    display: block;
-    margin-right: 5%;
+div.graphAndInputsFlex {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: left;
 }
 
+div.inputs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+div.inputsLeft {
+    display: block;
+    padding-left: 20px;
+}
+
+div.inputsRight {
+    display: flex;
+    padding-left: 60px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+}
+div.radioButtonGroup {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
 div.graph {
     display: block;
-    width: 50%;
+    width: 90%;
+    padding-right: 2px;
+
 }
 
 div.sunData {
     display: block;
-    margin-left: 6%
+    margin-left: 5%;
+    margin-top: 5%;
 }
 
 footer {

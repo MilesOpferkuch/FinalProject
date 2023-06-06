@@ -40,7 +40,7 @@ const chartConfig = {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: "Height (meters)",
+                    text: "Height (ft.)",
                     font: {
                         size: 16
                     }

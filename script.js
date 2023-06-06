@@ -52,10 +52,10 @@ function getTimezoneData(lat, lon, timestamp) {
     })
 }
 
-function getSunData(lat, lon, tz, date) {
+function getSunData(lat, lon, date) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${tz}/${date}`)
+        xhr.open("GET", `http://localhost:3000/suntimes/${lat}/${lon}/${date}`)
         xhr.send();
         xhr.onload = function() {
             if (xhr.readyState === 4) {
@@ -97,7 +97,8 @@ window.onload = function() {
     const beginDateSelector = document.getElementById("begin_date");
     const sunInfoText = document.getElementsByClassName("sunInfoText");
     const buttonGo = document.getElementById("buttonGo");
-    const errorText = document.getElementById("errortext")
+    const errorHeader = document.getElementById("errorHeader")
+    const errorText = document.getElementById("errorText")
 
     // Set up the graph, make it empty at first
     Chart.defaults.color = '#FFFFFF';
@@ -122,55 +123,35 @@ window.onload = function() {
                         // Get lat, lon and timezone info from the NOAA station
                         lat = metaResult.lat;
                         lon = metaResult.lng;
-                        // NOAA doesn't return the time compensated for DST
-                        // so we check with Google timezone API and the following monstrosity:
-                        let tzString = Math.abs(metaResult.timezonecorr).toString();
-                        tzString = tzString.padStart(2, '0');
-                        if (metaResult.timezonecorr < 0) {
-                            tzString = '-' + tzString;
-                        } else {
-                            tzString = '+' + tzString;
-                        }
-                        let dateObject = new Date(`${beginDateSelector.value}T00:00:00.000${tzString}:00`)
-                        let timestamp = dateObject.valueOf()/1000;
-                        // Fetch timezone data from Google's API
-                        getTimezoneData(metaResult.lat, metaResult.lng, timestamp).then(
-                            (tzResult) => {
-                                tzOffset = (tzResult.rawOffset + tzResult.dstOffset)/60/60;
-                                // Get sunrise/sunset times
-                                getSunData(lat, lon, tzOffset, beginDateSelector.value).then(
-                                    (sunResult) => {
-                                        sunInfoText.first_light.innerText = sunResult.first_light;
-                                        sunInfoText.dawn.innerText = sunResult.dawn;
-                                        sunInfoText.sunrise.innerText = sunResult.sunrise;
-                                        sunInfoText.golden_hour.innerText = sunResult.golden_hour;
-                                        sunInfoText.sunset.innerText = sunResult.sunset;
-                                        sunInfoText.dusk.innerText = sunResult.dusk;
-                                        sunInfoText.last_light.innerText = sunResult.last_light;
-                                        drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, tzResult.timeZoneName);
-                                        errorText.innerText = ""
-                                    },
-                                    (onSunRejected) => {
-                                        errorText.innerText = "Error retrieving sunrise/sunset data";
-                                        console.log("Error retrieving sunrise/sunset data");
-                                    }
-                                );
+                        // Get sunrise/sunset times
+                        getSunData(lat, lon, beginDateSelector.value).then(
+                            (sunResult) => {
+                                sunInfoText.first_light.innerText = sunResult.first_light;
+                                sunInfoText.dawn.innerText = sunResult.dawn;
+                                sunInfoText.sunrise.innerText = sunResult.sunrise;
+                                sunInfoText.golden_hour.innerText = sunResult.golden_hour;
+                                sunInfoText.sunset.innerText = sunResult.sunset;
+                                sunInfoText.dusk.innerText = sunResult.dusk;
+                                sunInfoText.last_light.innerText = sunResult.last_light;
+                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunResult.timezone);
+                                errorHeader.innerText = "";
+                                errorText.innerText = "";
                             },
-                            (onTzRejected) => {
-                                errorText.innerText = "Error retrieving timezone data";
-                                console.log("Error retrieving timezone data");
+                            (onSunRejected) => {
+                                errorHeader.innerText = "Error retrieving sunrise/sunset data:";
+                                console.log("Error retrieving sunrise/sunset data");
                             }
-                        )
-                    },
+                        );
+                    },  
                     (onMetaRejected) => {
-                        errorText.innerText = "Error retrieving station metadata";
-                        console.log("Error retrieving station metadata");
-                    });                
+                        errorHeader.innerText = "Error retrieving station metadata:";
+                    }
+                );  
             },
             (onTidesRejected) => {
-                errorText.innerText = "Error retrieving tide data";
-                console.log("Error retrieving tide data");
+                errorHeader.innerText = "Error retrieving tide data:";
+                errorText.innerText = JSON.parse(onTidesRejected.message).error.message;
             }
-        )
-    });
-};
+        );
+        
+    })}
