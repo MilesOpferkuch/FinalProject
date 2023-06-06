@@ -16,7 +16,7 @@ app.get("/tides/:station/:begin_date", (req, res) => {
     request(url, (error, response, body) => {
         if (error || body.includes("error")) {
             console.log(`Error retrieving tide data: ${body}`)
-            return res.status(500).send(`Error retrieving tide data: ${body}`);
+            return res.status(500).send(body);
         }
         body = JSON.parse(body);
         res.send(body);
@@ -45,12 +45,11 @@ app.get("/metadata/:station", (req, res) => {
     })
 });
 
-app.get("/suntimes/:lat/:lon/:tz/:date", (req, res) => {
+app.get("/suntimes/:lat/:lon/:date", (req, res) => {
     const lat = req.params.lat;
     const lon = req.params.lon;
-    const tz = req.params.tz;
     const date = req.params.date;
-    const url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lon}&timezone=${tz}&date=${date}`
+    const url = `https://api.sunrisesunset.io/json?lat=${lat}&lng=${lon}&date=${date}`
     console.log(url);
     request(url, (error, response, body) => {
         if (error) {
