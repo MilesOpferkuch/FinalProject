@@ -105,6 +105,10 @@ window.onload = function() {
     Chart.defaults.backgroundColor = '#c4c4c4';
     Chart.defaults.borderColor = '#575757';
     const tideChart = new Chart(ctx, chartConfig);
+    // Redraw it when window is resized
+    addEventListener("resize", (event) => {
+        tideChart.resize();
+    });
 
     // Configure date picker
     beginDateSelector.value = dateString;

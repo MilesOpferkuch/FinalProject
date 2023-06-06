@@ -12,10 +12,6 @@ html {
     box-sizing: border-box;
 }
 
-.mainContent {
-
-}
-
 button {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 16px;
@@ -30,11 +26,10 @@ button {
 label {
     font-size: 16px;
     margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 input {
-    margin-top: 15px;
+    margin-top: 10px;
     margin-bottom: 15px;
     padding: 4px;
     font-family: monospace;
@@ -73,10 +68,12 @@ a {
 }
 
 hr {
-    margin-left: 3%;
-    margin-right: 3%;
-    margin-top: 64px;
+    margin: 3%;
     border: 1px solid #5c5c5c;
+}
+
+canvas {
+    width: 100%;
 }
 
 div.mainContent {
@@ -92,10 +89,9 @@ div.mainContent {
 }
 
 div.graphAndInputsFlex {
-    width: 70%;
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: left;
 }
 
@@ -103,18 +99,21 @@ div.inputs {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    justify-content: left;
+    margin-right: 40px;
 }
 
 div.inputsLeft {
-    display: block;
     padding-left: 20px;
+    display: block;
 }
 
 div.inputsRight {
+    padding-left: 160px;
+    padding-right: 100px;
     display: flex;
-    padding-left: 60px;
-    flex-wrap: nowrap;
     flex-direction: column;
+    flex-wrap: nowrap;
 
 }
 div.radioButtonGroup {
@@ -122,17 +121,19 @@ div.radioButtonGroup {
     flex-wrap: nowrap;
     flex-direction: row;
 }
+
 div.graph {
     display: block;
     width: 90%;
     padding-right: 2px;
-
 }
 
 div.sunData {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin-left: 5%;
-    margin-top: 5%;
+    justify-self:center;
+    width: 10%
 }
 
 footer {
