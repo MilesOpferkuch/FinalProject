@@ -24,17 +24,17 @@ button {
 }
 
 label {
+    font-size: 16px;
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 16px;
 }
 
 input {
+    font-family: monospace;
+    font-size: 14px;
     margin-top: 5px;
     margin-bottom: 5px;
     padding: 4px;
-    font-family: monospace;
-    font-size: 14px;
 }
 
 input[type="radio"] {
@@ -111,8 +111,8 @@ div.inputsRight {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-
 }
+
 div.radioButtonGroup {
     display: flex;
     flex-wrap: nowrap;
@@ -137,6 +137,7 @@ div.sunData {
 footer {
     width: 100%;
     margin-top: 30px;
+    margin-bottom: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
