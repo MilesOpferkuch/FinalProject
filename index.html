@@ -20,28 +20,29 @@
                 <hr>
                 <div class="inputs">
                     <div class="inputsLeft">
-                        <label for="stationInput"><a href="https://tidesandcurrents.noaa.gov/map/">Station ID:</a></label>
+                        <label for="stationInput">Station ID <a href="https://tidesandcurrents.noaa.gov/map/">(find my station)</a></label>
                         <br>
                         <input type="number" id="station" name="stationInput" value="9410230" style="width: 120px" required />
-                        <br>
+                        <br><br>
                         <label for="begin_date_picker">Date:</label>
                         <br>
-                        <input type="date" id="begin_date" name="begin_date_picker" required />
+                        <input type="date" id="beginDate" name="begin_date_picker" required />
                     </div>
                     <div class="inputsRight">
                         <h4>Units</h4>
                         <div class="radioButtonGroup">
-                            <label for="units">Feet</label>
-                            <input type="radio" name="units" value="feet" />
-                            <label for="units">Meters</label>
-                            <input type="radio" name="units" value="meters" />
+                            <label for="radioFeet">Feet</label>
+                            <input type="radio" name="units" id="radioFeet" value="english" checked />
+                            <label for="radioMeters">Meters</label>
+                            <input type="radio" name="units" id="radioMeters" value="metric" />
                         </div>
+                        <br>
                         <h4>Time format</h4>
                         <div class="radioButtonGroup">
-                            <label for="timeFormat">12 Hour</label>
-                            <input type="radio" name="timeFormat" value="12" />
-                            <label for="timeFormat">24 Hour</label>
-                            <input type="radio" name="timeFormat" value="24" />
+                            <label for="radio12">12 Hour</label>
+                            <input type="radio" name="timeFormat" id="radio12h" value="12" checked />
+                            <label for="radio24">24 Hour</label>
+                            <input type="radio" name="timeFormat" id="radio24h" value="24" />
                         </div>
                     </div>
                     <div>

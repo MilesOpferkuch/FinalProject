@@ -24,23 +24,22 @@ button {
 }
 
 label {
-    font-size: 16px;
     margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
 }
 
 input {
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding: 4px;
     font-family: monospace;
     font-size: 14px;
 }
 
 input[type="radio"] {
-    margin-top: 10px;
-    margin-bottom: 30px;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 10px;
+    margin-right: 20px;
 }
 
 select {
@@ -68,7 +67,6 @@ a {
 }
 
 hr {
-    margin: 3%;
     border: 1px solid #5c5c5c;
 }
 
@@ -78,17 +76,15 @@ canvas {
 
 div.mainContent {
     width: 100%;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    margin-bottom: 10%;
+    margin-top: 2%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: left;
+    justify-content: center;
 }
 
 div.graphAndInputsFlex {
+    width: 60%;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -96,11 +92,12 @@ div.graphAndInputsFlex {
 }
 
 div.inputs {
+    margin-top: 30px;
+    margin-right: 40px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: left;
-    margin-right: 40px;
+    justify-content: space-between;
 }
 
 div.inputsLeft {
@@ -109,8 +106,8 @@ div.inputsLeft {
 }
 
 div.inputsRight {
-    padding-left: 160px;
-    padding-right: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -125,12 +122,13 @@ div.radioButtonGroup {
 div.graph {
     display: block;
     width: 90%;
-    padding-right: 2px;
+    margin-bottom: 8px;
 }
 
 div.sunData {
     display: flex;
     flex-direction: column;
+    margin-top: 2%;
     margin-left: 5%;
     justify-self:center;
     width: 10%
@@ -138,8 +136,7 @@ div.sunData {
 
 footer {
     width: 100%;
-    margin-top: 22px;
-    margin-bottom: 22px;
+    margin-top: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

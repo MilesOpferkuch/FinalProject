@@ -8,10 +8,11 @@ app.get('/', (req, res) => {
     res.send('Hello World! Welcome to Node.js')
 })
 
-app.get("/tides/:station/:begin_date", (req, res) => {
+app.get("/tides/:station/:begin_date/:units", (req, res) => {
     const station = req.params.station;
     const begin_date = req.params.begin_date;
-    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&range=24&datum=MLLW&station=${station}&time_zone=lst_ldt&units=english&interval=30&format=json`
+    const units = req.params.units;
+    const url = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&begin_date=${begin_date}&range=24&datum=MLLW&station=${station}&time_zone=lst_ldt&units=${units}&interval=30&format=json`
     console.log(url);
     request(url, (error, response, body) => {
         if (error || body.includes("error")) {

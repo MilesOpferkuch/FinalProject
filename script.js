@@ -1,7 +1,7 @@
-function getTides(station, beginDate) {
+function getTides(station, beginDate, units) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}`);
+        xhr.open("GET", `http://localhost:3000/tides/${station}/${beginDate}/${units}`);
         xhr.send();
         xhr.onload = function() {
             if (xhr.readyState === 4) {
@@ -70,13 +70,16 @@ function getSunData(lat, lon, date) {
     })
 }
 
-function drawGraph(chart, tideData, date, metadata, timeZoneName) {
+function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, units) {
     // Clear all chart data
     chart.data.datasets[0].data = [];
-    // Set text
+    // Set graph title and axis titles
     chart.options.plugins.title.text = `Tides on ${date} at station ${metadata.name} (${metadata.station})`;
-    chart.options.scales.x.title.text = `Time (${timeZoneName})`
-    // Insert new data
+    chart.options.scales.x.title.text = `Time (${timeZoneName})`;
+    chart.options.scales.y.title.text = (units == "english") ? "Height (ft.)" : "Height (meters)";
+    // Set x axis format (12 hour or 24 hour)
+    (twelveHour) ? (chart.data.labels = labels12h) : (chart.data.labels = labels24h) ;
+    // Insert tide data
     let parsedData = JSON.parse(tideData).predictions;
     for (var i = 0; i < parsedData.length; i++) {
         chart.data.datasets[0].data.push(parsedData[i].v);
@@ -94,18 +97,20 @@ window.onload = function() {
 
     const ctx = document.getElementById("myChart");
     const stationInput = document.getElementById("station");
-    const beginDateSelector = document.getElementById("begin_date");
+    const beginDateSelector = document.getElementById("beginDate");
     const sunInfoText = document.getElementsByClassName("sunInfoText");
     const buttonGo = document.getElementById("buttonGo");
-    const errorHeader = document.getElementById("errorHeader")
-    const errorText = document.getElementById("errorText")
-
+    const errorHeader = document.getElementById("errorHeader");
+    const errorText = document.getElementById("errorText");
+    const radioFeet = document.getElementById("radioFeet");
+    const radio12h = document.getElementById("radio12h");
+    
     // Set up the graph, make it empty at first
     Chart.defaults.color = '#FFFFFF';
     Chart.defaults.backgroundColor = '#c4c4c4';
     Chart.defaults.borderColor = '#575757';
     const tideChart = new Chart(ctx, chartConfig);
-    // Redraw it when window is resized
+    // Redraw graph when window is resized
     addEventListener("resize", (event) => {
         tideChart.resize();
     });
@@ -120,7 +125,12 @@ window.onload = function() {
         let beginDate = beginDateSelector.value.replaceAll('-', '');
         let lat = 0;
         let lon = 0;
-        getTides(station, beginDate).then(
+        // Get selected units
+        let units = (radioFeet.checked) ? "english" : "metric";
+        // Get selected time format
+        let twelveHour = (radio12h.checked) ? true : false;
+
+        getTides(station, beginDate, units).then(
             (tidesResult) => {
                 getMetadata(station).then(
                     (metaResult) => {
@@ -137,7 +147,7 @@ window.onload = function() {
                                 sunInfoText.sunset.innerText = sunResult.sunset;
                                 sunInfoText.dusk.innerText = sunResult.dusk;
                                 sunInfoText.last_light.innerText = sunResult.last_light;
-                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunResult.timezone);
+                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunResult.timezone, twelveHour, units);
                                 errorHeader.innerText = "";
                                 errorText.innerText = "";
                             },
