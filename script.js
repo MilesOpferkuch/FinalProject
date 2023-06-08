@@ -96,12 +96,14 @@ window.onload = function() {
     addEventListener("resize", (event) => {
         tideChart.resize();
     });
-
+    
     // Configure date picker
     beginDateSelector.value = dateString;
     beginDateSelector.min = dateString;
 
     buttonGo.addEventListener("click", () => {
+        tideChart.options.plugins.title.text = "Loading...";
+        tideChart.update();
         let station = stationInput.value;
         // Tides API wants yyyymmdd without dashes
         let beginDate = beginDateSelector.value.replaceAll('-', '');
@@ -151,5 +153,4 @@ window.onload = function() {
                 errorText.innerText = JSON.parse(onTidesRejected.message).error.message;
             }
         );
-        
     })}
