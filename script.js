@@ -52,7 +52,22 @@ function getSunData(lat, lon, date) {
     })
 }
 
-function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, units) {
+// Takes input string formatted as HH:MM:SS PM, returns the number of seconds from midnight
+// This is super janky but it works
+function hhmmssToSeconds(input) {
+    let str = input.split(" ");     // Isolate the period from the time
+    let time = str[0];
+    let period = str[1];
+    let split = time.split(":");    // Isolate hours, mins and secs from each other
+    let hrs = parseInt(split[0], 10);
+    let mins = parseInt(split[1], 10);
+    let secs = parseInt(split[2], 10);
+    // If time is PM, add 12 hours
+    let pmOffset = (period == "PM" && hrs != 12) ? (12 * 60 * 60) : 0;
+    return (hrs * 60 * 60) + (mins * 60) + secs + pmOffset;
+}
+
+function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, units, sunData) {
     // Clear all chart data
     chart.data.datasets[0].data = [];
     // Set graph title and axis titles
@@ -63,9 +78,37 @@ function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, un
     (twelveHour) ? (chart.data.labels = labels12h) : (chart.data.labels = labels24h) ;
     // Insert tide data
     let parsedData = JSON.parse(tideData).predictions;
-    for (var i = 0; i < parsedData.length; i++) {
+    for (var i = 0; i < 24; i++) {
         chart.data.datasets[0].data.push(parsedData[i].v);
     }
+    // Configure chart colors. Post-sunrise is orange, post-sunset is blue, transition hours are purple.
+    let colorList = [];
+    let sunriseSecs = hhmmssToSeconds(sunData.sunrise);
+    let sunsetSecs = hhmmssToSeconds(sunData.sunset);
+    for (var i = 0; i < 24; i++) {
+        let currentSecs = i * 60 * 60;
+        // If the current time is before sunrise - 1hr, make it blue
+        if (currentSecs + 3600 < sunriseSecs) {
+            colorList.push('rgb(109, 164, 252)');
+        }
+        // If sunrise occurs within this hour, make it purple
+        else if (currentSecs < sunriseSecs && currentSecs + 3600 > sunriseSecs) {
+            colorList.push('rgb(135, 72, 150)');
+        }
+        // If the current time is between sunrise and sunset, make it orange
+        else if (currentSecs > sunriseSecs && currentSecs < sunsetSecs - 3600) {
+            colorList.push('rgb(252, 190, 109)');
+        }
+        // If sunset occurs within this hour, make it purple
+        else if (currentSecs < sunsetSecs && currentSecs + 3600 > sunsetSecs) {
+            colorList.push('rgb(135, 72, 150)');
+        }
+        // If after sunset, make it blue
+        else if (currentSecs > sunsetSecs) {
+            colorList.push('rgb(109, 164, 252)');
+        }
+    }
+    chart.data.datasets[0].backgroundColor = colorList;
     chart.update();
 }
 
@@ -133,7 +176,7 @@ window.onload = function() {
                                 sunInfoText.sunset.innerText = sunData.sunset;
                                 sunInfoText.dusk.innerText = sunData.dusk;
                                 sunInfoText.last_light.innerText = sunData.last_light;
-                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunData.timezone, twelveHour, units);
+                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunData.timezone, twelveHour, units, sunData);
                                 errorHeader.innerText = "";
                                 errorText.innerText = "";
                             },
