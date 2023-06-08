@@ -108,23 +108,23 @@ function drawGraph(chart, tideData, date, metadata, twelveHour, units, sunData) 
         let currentSecs = i * 60 * 60;
         // If the current time is before sunrise - 1hr, make it blue
         if (currentSecs + 3600 < sunriseSecs) {
-            colorList.push('rgb(109, 164, 252)');
+            colorList.push(colorNight);
         }
-        // If sunrise occurs within this hour, make it purple
+        // If sunrise occurs within this hour, make it orange
         else if (currentSecs < sunriseSecs && currentSecs + 3600 > sunriseSecs) {
-            colorList.push('rgb(135, 72, 150)');
+            colorList.push(colorTransition);
         }
-        // If the current time is between sunrise and sunset, make it orange
+        // If the current time is between sunrise and sunset, make it yellow
         else if (currentSecs > sunriseSecs && currentSecs < sunsetSecs - 3600) {
-            colorList.push('rgb(255, 209, 59)');
+            colorList.push(colorDay);
         }
-        // If sunset occurs within this hour, make it purple
+        // If sunset occurs within this hour, make it orange
         else if (currentSecs < sunsetSecs && currentSecs + 3600 > sunsetSecs) {
-            colorList.push('rgb(135, 72, 150)');
+            colorList.push(colorTransition);
         }
         // If after sunset, make it blue
         else if (currentSecs > sunsetSecs) {
-            colorList.push('rgb(109, 164, 252)');
+            colorList.push(colorNight);
         }
     }
     chart.data.datasets[0].backgroundColor = colorList;

@@ -16,6 +16,9 @@ const labels24h = [
 "20:00", "21:00", "22:00", "23:00"
 ]
 
+const colorNight = '#0080A3';
+const colorTransition = '#FE9000';
+const colorDay = '#FFF0AD';
 
 const chartConfig = {
     type: 'bar',
