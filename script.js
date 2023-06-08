@@ -97,7 +97,7 @@ function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, un
         }
         // If the current time is between sunrise and sunset, make it orange
         else if (currentSecs > sunriseSecs && currentSecs < sunsetSecs - 3600) {
-            colorList.push('rgb(252, 190, 109)');
+            colorList.push('rgb(255, 209, 59)');
         }
         // If sunset occurs within this hour, make it purple
         else if (currentSecs < sunsetSecs && currentSecs + 3600 > sunsetSecs) {
