@@ -1,3 +1,4 @@
+// Get tide data from NOAA COOPS
 function getTides(station, beginDate, units) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -16,6 +17,7 @@ function getTides(station, beginDate, units) {
     })
 }
 
+// Get station metadata from NOAA COOPS
 function getMetadata(station) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -34,6 +36,7 @@ function getMetadata(station) {
     })
 }
 
+// Get data from sunrisesunset.io
 function getSunData(lat, lon, date) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -55,16 +58,32 @@ function getSunData(lat, lon, date) {
 // Takes input string formatted as HH:MM:SS PM, returns the number of seconds from midnight
 // This is super janky but it works
 function hhmmssToSeconds(input) {
-    let str = input.split(" ");     // Isolate the period from the time
+    // Isolate the period from the time
+    let str = input.split(" ");
     let time = str[0];
     let period = str[1];
-    let split = time.split(":");    // Isolate hours, mins and secs from each other
+    // Isolate hours, mins and secs from each other
+    let split = time.split(":");
     let hrs = parseInt(split[0], 10);
     let mins = parseInt(split[1], 10);
     let secs = parseInt(split[2], 10);
-    // If time is PM, add 12 hours
+    // If time is 1 PM or later, add 12 hours
     let pmOffset = (period == "PM" && hrs != 12) ? (12 * 60 * 60) : 0;
     return (hrs * 60 * 60) + (mins * 60) + secs + pmOffset;
+}
+
+// Take a string with format HH:MM:SS AM.
+// If twelveHour is true, return it without changes.
+// If twelveHour is false, convert it to 24 hour format.
+// This is needed because sunrisesunset.io only returns times in 12 hour format.
+function formatTime(input, twelveHour) {
+    if (twelveHour) {
+        return input
+    } else {
+        let time = new Date(null);
+        time.setSeconds(hhmmssToSeconds(input));
+        return time.toISOString().slice(11, 19);
+    }
 }
 
 function drawGraph(chart, tideData, date, metadata, twelveHour, units, sunData) {
@@ -113,17 +132,10 @@ function drawGraph(chart, tideData, date, metadata, twelveHour, units, sunData) 
 }
 
 window.onload = function() {
-    // Set up the date picker
-    let today = new Date();
-    let year = today.getFullYear().toString();
-    let month = (today.getMonth() + 1).toString().padStart(2, "0");
-    let day = today.getDate().toString().padStart(2, "0");
-    let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
-
     const ctx = document.getElementById("myChart");
-    const stationInput = document.getElementById("station");
-    const beginDateSelector = document.getElementById("beginDate");
-    const sunInfoText = document.getElementsByClassName("sunInfoText");
+    const inputStation = document.getElementById("station");
+    const inputDate = document.getElementById("datePicker");
+    const textSunInfo = document.getElementsByClassName("textSunInfo");
     const buttonGo = document.getElementById("buttonGo");
     const errorHeader = document.getElementById("errorHeader");
     const errorText = document.getElementById("errorText");
@@ -141,15 +153,20 @@ window.onload = function() {
     });
     
     // Configure date picker
-    beginDateSelector.value = dateString;
-    beginDateSelector.min = dateString;
+    let today = new Date();
+    let year = today.getFullYear().toString();
+    let month = (today.getMonth() + 1).toString().padStart(2, "0");
+    let day = today.getDate().toString().padStart(2, "0");
+    let dateString = `${year}-${month}-${day}`; // HTML date picker needs yyyy-mm-dd
+    inputDate.value = dateString;
+    inputDate.min = dateString;
 
     buttonGo.addEventListener("click", () => {
         tideChart.options.plugins.title.text = "Loading...";
         tideChart.update();
-        let station = stationInput.value;
+        let station = inputStation.value;
         // Tides API wants yyyymmdd without dashes
-        let beginDate = beginDateSelector.value.replaceAll('-', '');
+        let beginDate = inputDate.value.replaceAll('-', '');
         let lat = 0;
         let lon = 0;
         // Get selected units
@@ -165,18 +182,18 @@ window.onload = function() {
                         lat = metaResult.lat;
                         lon = metaResult.lng;
                         // Get sunrise/sunset times
-                        getSunData(lat, lon, beginDateSelector.value).then(
+                        getSunData(lat, lon, inputDate.value).then(
                             (sunResult) => {
-                                const sunData = JSON.parse(sunResult);
-                                sunInfoText.first_light.innerText = sunData.first_light;
-                                sunInfoText.dawn.innerText = sunData.dawn;
-                                sunInfoText.sunrise.innerText = sunData.sunrise;
-                                sunInfoText.solar_noon.innerText = sunData.solar_noon;
-                                sunInfoText.golden_hour.innerText = sunData.golden_hour;
-                                sunInfoText.sunset.innerText = sunData.sunset;
-                                sunInfoText.dusk.innerText = sunData.dusk;
-                                sunInfoText.last_light.innerText = sunData.last_light;
-                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, twelveHour, units, sunData);
+                                let sunData = JSON.parse(sunResult);
+                                textSunInfo.first_light.innerText = formatTime(sunData.first_light, twelveHour);
+                                textSunInfo.dawn.innerText = formatTime(sunData.dawn, twelveHour);
+                                textSunInfo.sunrise.innerText = formatTime(sunData.sunrise, twelveHour);
+                                textSunInfo.solar_noon.innerText = formatTime(sunData.solar_noon, twelveHour);
+                                textSunInfo.golden_hour.innerText = formatTime(sunData.golden_hour, twelveHour);
+                                textSunInfo.sunset.innerText = formatTime(sunData.sunset, twelveHour);
+                                textSunInfo.dusk.innerText = formatTime(sunData.dusk, twelveHour);
+                                textSunInfo.last_light.innerText = formatTime(sunData.last_light, twelveHour);
+                                drawGraph(tideChart, tidesResult, inputDate.value, metaResult, twelveHour, units, sunData);
                                 errorHeader.innerText = "";
                                 errorText.innerText = "";
                             },
