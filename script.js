@@ -34,24 +34,6 @@ function getMetadata(station) {
     })
 }
 
-function getTimezoneData(lat, lon, timestamp) {
-    return new Promise(function(resolve, reject) {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://localhost:3000/timezone/${lat}/${lon}/${timestamp}`)
-        xhr.send();
-        xhr.onload = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    const body = JSON.parse(xhr.responseText);
-                    resolve(body);
-                } else {
-                    reject(Error(xhr.responseText));
-                }
-            }
-        }        
-    })
-}
-
 function getSunData(lat, lon, date) {
     return new Promise(function(resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -159,6 +141,7 @@ window.onload = function() {
                     },  
                     (onMetaRejected) => {
                         errorHeader.innerText = "Error retrieving station metadata:";
+                        errorText.innerText = JSON.parse(onMetaRejected.message).errorMsg;
                     }
                 );  
             },

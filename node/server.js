@@ -31,7 +31,7 @@ app.get("/metadata/:station", (req, res) => {
     request(url, (error, response, body) => {
         if (error || body.includes("errorMsg")) {
             console.log("Error retrieving metadata: ", body)
-            return res.status(500).send(`Error retrieving station metadata: ${body}`);
+            return res.status(500).send(body);
         } else {
         body = JSON.parse(body).stations[0];
         res.send({
@@ -62,23 +62,6 @@ app.get("/suntimes/:lat/:lon/:date", (req, res) => {
         }
     })
 });
-
-app.get("/timezone/:lat/:lon/:timestamp", (req, res) => {
-    const lat = req.params.lat;
-    const lon = req.params.lon;
-    const timestamp = req.params.timestamp;
-    const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=AIzaSyBQoqoV57zkl9rIHLKVKAbMpsdVddOZNWQ`;
-    console.log(url);
-    request(url, (error, response, body) => {
-        if (error|| body.includes("errorMessage")) {
-            console.log(`Error retrieving timezone data: ${body}`)
-            return res.status(500).send(`Error retrieving timezone data: ${body}`);
-        } else {
-        body = JSON.parse(body);
-        res.send(body);
-        }
-    })
-})
 
 app.listen(3000, () => {
     console.log('App listening on port 3000!');
