@@ -67,12 +67,12 @@ function hhmmssToSeconds(input) {
     return (hrs * 60 * 60) + (mins * 60) + secs + pmOffset;
 }
 
-function drawGraph(chart, tideData, date, metadata, timeZoneName, twelveHour, units, sunData) {
+function drawGraph(chart, tideData, date, metadata, twelveHour, units, sunData) {
     // Clear all chart data
     chart.data.datasets[0].data = [];
     // Set graph title and axis titles
     chart.options.plugins.title.text = `Tides on ${date} at station ${metadata.name} (${metadata.station})`;
-    chart.options.scales.x.title.text = `Time (${timeZoneName})`;
+    chart.options.scales.x.title.text = `Time (${sunData.timezone})`;
     chart.options.scales.y.title.text = (units == "english") ? "Height (ft.)" : "Height (meters)";
     // Set x axis format (12 hour or 24 hour)
     (twelveHour) ? (chart.data.labels = labels12h) : (chart.data.labels = labels24h) ;
@@ -176,7 +176,7 @@ window.onload = function() {
                                 sunInfoText.sunset.innerText = sunData.sunset;
                                 sunInfoText.dusk.innerText = sunData.dusk;
                                 sunInfoText.last_light.innerText = sunData.last_light;
-                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunData.timezone, twelveHour, units, sunData);
+                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, twelveHour, units, sunData);
                                 errorHeader.innerText = "";
                                 errorText.innerText = "";
                             },
