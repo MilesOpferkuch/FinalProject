@@ -42,7 +42,7 @@ function getSunData(lat, lon, date) {
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    const body = JSON.parse(xhr.responseText);
+                    const body = xhr.responseText;
                     resolve(body);
                 } else {
                     reject(Error(xhr.responseText));
@@ -116,26 +116,27 @@ window.onload = function() {
             (tidesResult) => {
                 getMetadata(station).then(
                     (metaResult) => {
-                        // Get lat, lon and timezone info from the NOAA station
+                        // Get lat and lon from the NOAA station
                         lat = metaResult.lat;
                         lon = metaResult.lng;
                         // Get sunrise/sunset times
                         getSunData(lat, lon, beginDateSelector.value).then(
                             (sunResult) => {
-                                sunInfoText.first_light.innerText = sunResult.first_light;
-                                sunInfoText.dawn.innerText = sunResult.dawn;
-                                sunInfoText.sunrise.innerText = sunResult.sunrise;
-                                sunInfoText.golden_hour.innerText = sunResult.golden_hour;
-                                sunInfoText.sunset.innerText = sunResult.sunset;
-                                sunInfoText.dusk.innerText = sunResult.dusk;
-                                sunInfoText.last_light.innerText = sunResult.last_light;
-                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunResult.timezone, twelveHour, units);
+                                const sunData = JSON.parse(sunResult);
+                                sunInfoText.first_light.innerText = sunData.first_light;
+                                sunInfoText.dawn.innerText = sunData.dawn;
+                                sunInfoText.sunrise.innerText = sunData.sunrise;
+                                sunInfoText.golden_hour.innerText = sunData.golden_hour;
+                                sunInfoText.sunset.innerText = sunData.sunset;
+                                sunInfoText.dusk.innerText = sunData.dusk;
+                                sunInfoText.last_light.innerText = sunData.last_light;
+                                drawGraph(tideChart, tidesResult, beginDateSelector.value, metaResult, sunData.timezone, twelveHour, units);
                                 errorHeader.innerText = "";
                                 errorText.innerText = "";
                             },
                             (onSunRejected) => {
                                 errorHeader.innerText = "Error retrieving sunrise/sunset data:";
-                                console.log("Error retrieving sunrise/sunset data");
+                                errorText.innerText = JSON.parse(onSunRejected.message).body;
                             }
                         );
                     },  
