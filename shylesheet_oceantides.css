@@ -139,8 +139,8 @@ footer {
     margin-top: 30px;
     margin-bottom: 30px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
-    color: #8a8a8a;
+    align-items: center;
+    color: #b1b1b1;
 }
