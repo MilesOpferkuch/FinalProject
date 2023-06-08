@@ -55,6 +55,11 @@ a {
     color: rgb(232, 232, 232);
 }
 
+.textSunInfo {
+    padding-top: 3px;
+    padding-bottom: 10px;
+}
+
 .errorHeader {
     margin-top: 20px;
     margin-bottom: 10px;
