@@ -200,18 +200,24 @@ window.onload = function() {
                             (onSunRejected) => {
                                 errorHeader.innerText = "Error retrieving sunrise/sunset data:";
                                 errorText.innerText = JSON.parse(onSunRejected.message).body;
+                                tideChart.options.plugins.title.text = "";
+                                tideChart.update();
                             }
                         );
                     },  
                     (onMetaRejected) => {
                         errorHeader.innerText = "Error retrieving station metadata:";
                         errorText.innerText = JSON.parse(onMetaRejected.message).errorMsg;
+                        tideChart.options.plugins.title.text = "";
+                        tideChart.update();
                     }
                 );  
             },
             (onTidesRejected) => {
                 errorHeader.innerText = "Error retrieving tide data:";
                 errorText.innerText = JSON.parse(onTidesRejected.message).error.message;
+                tideChart.options.plugins.title.text = "";
+                tideChart.update();
             }
         );
     })}
