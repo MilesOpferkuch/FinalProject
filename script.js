@@ -128,6 +128,7 @@ window.onload = function() {
                                 sunInfoText.first_light.innerText = sunData.first_light;
                                 sunInfoText.dawn.innerText = sunData.dawn;
                                 sunInfoText.sunrise.innerText = sunData.sunrise;
+                                sunInfoText.solar_noon.innerText = sunData.solar_noon;
                                 sunInfoText.golden_hour.innerText = sunData.golden_hour;
                                 sunInfoText.sunset.innerText = sunData.sunset;
                                 sunInfoText.dusk.innerText = sunData.dusk;
